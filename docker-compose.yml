@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  file-storage-srv:
+    build:
+      context: ./minio
+    container_name: file-storage-srv
+    restart: always
+    network_mode: "host"
+    volumes:
+      - storage-volume:/data
+      - ./minio/certs:/tmp/certs
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_CERT_PASSWD=${MINIO_CERT_PASSWD}
+      - MINIO_DEFAULT_BUCKETS=${MINIO_DEFAULT_BUCKETS}
+    command: server /data --console-address ":9001"
+
+volumes:
+  storage-volume:
